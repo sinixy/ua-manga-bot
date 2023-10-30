@@ -51,13 +51,18 @@ async def enable_reminders(callback: types.CallbackQuery, user: User):
     await callback.message.delete()
 
 @reminder_router.callback_query(F.data.startswith("update:yes"))
-async def handle_agree_update(callback: types.CallbackQuery, user: User):
+async def handle_agree_update(callback: types.CallbackQuery, bot: Bot, user: User, team: Team):
     await callback.message.edit_text(text=callback.message.text + "\n\n✅ <b>Надішлемо новий пост</b>")
 
     reminder_type = callback.data.split(":")[-1]
     confirmation_reminder = await set_confirmation_reminder(user.id, ReminderType[reminder_type])
 
     await callback.message.reply(f"Чудово, {ts_to_strdt(confirmation_reminder.remind_at)} буде додаткове нагадування, щоб підтвердити, що пост надіслано :)")
+
+    await notify_admins(
+        bot,
+        f"🙋‍♀️ Користувач @{callback.from_user.username} з команди {team.name} вирішив робити <b>{ReminderType.to_ukr(reminder_type)}</b> оновлення. Чекаємо підтвердження."
+    )
 
 @reminder_router.callback_query(F.data.startswith("update:no"))
 async def handle_deny_update(callback: types.CallbackQuery, bot: Bot, user: User, team: Team):
