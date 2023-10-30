@@ -54,8 +54,8 @@ async def enable_reminders(callback: types.CallbackQuery, user: User):
 async def handle_agree_update(callback: types.CallbackQuery, bot: Bot, user: User, team: Team):
     await callback.message.edit_text(text=callback.message.text + "\n\n✅ <b>Надішлемо новий пост</b>")
 
-    reminder_type = callback.data.split(":")[-1]
-    confirmation_reminder = await set_confirmation_reminder(user.id, ReminderType[reminder_type])
+    reminder_type = ReminderType[callback.data.split(":")[-1]]
+    confirmation_reminder = await set_confirmation_reminder(user.id, reminder_type)
 
     await callback.message.reply(f"Чудово, {ts_to_strdt(confirmation_reminder.remind_at)} буде додаткове нагадування, щоб підтвердити, що пост надіслано :)")
 
