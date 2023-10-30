@@ -1,0 +1,21 @@
+services:
+  bot:
+    build: .
+    init: true
+    environment:
+      - TZ=Europe/Kiev
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+    env_file:
+      - .env
+  db:
+    image: mongo:6.0
+    environment:
+      - TZ=Europe/Kiev
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
