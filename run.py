@@ -7,6 +7,7 @@ async def run():
     scheduler.ctx.add_instance(bot, Bot)    
 
     scheduler.start()
+    print('JOBS LOADED:', len(scheduler.get_jobs()))
     await dp.start_polling(bot)
 
 
